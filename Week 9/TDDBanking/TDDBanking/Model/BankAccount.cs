@@ -23,7 +23,15 @@ public class BankAccount
     {
         // TODO - implement the get. It should iterate through the all of the transactions 
         // and apply withdrawals or deposits to the account and return the balance
-        get;
+        get
+        {
+            decimal balance = 0;
+            foreach(var transaction in _allTransactions)
+            {
+                balance += transaction.Amount;
+            }
+            return balance;
+        }
         
     }
 
@@ -31,8 +39,14 @@ public class BankAccount
     // Constructor
     public BankAccount(string accountNumber, string owner, decimal initialBalance)
     {
+        AccountNumber = accountNumber;
+        Owner = owner;
+        var initialDeposit = new Transaction(AccountNumber,
+            initialBalance, DateTime.Now, TransactionType.Deposit,
+            "Opening account balance");
+        _allTransactions.Add(initialDeposit);
         // TODO - implement the constructor
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
 
     }
 
@@ -60,7 +74,15 @@ public class BankAccount
     public void MakeWithdrawal(decimal amount, DateTime date, string note)
     {
         // TODO - implement the MakeWithdrawal method
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
+        if(-amount > Balance)
+        {
+            throw new ArgumentException("You cannot withdraw more money than you have");
+        }
+        var withdrawl = new Transaction(AccountNumber,
+            amount, DateTime.Now, TransactionType.Withdrawal,
+            note);
+        _allTransactions.Add(withdrawl);
     }
 }
 
